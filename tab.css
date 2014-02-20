@@ -1,3 +1,20 @@
+body{
+	text-align: center;
+}
+.windows{
+	margin: auto;
+	margin-top: 200px;
+	padding: 50px;
+	width: 616px;
+	box-shadow: 0 0 62px #eee;
+	border-radius: 10px;
+	font-family: microsoft yahei;
+}
+.chrome-ext-list{
+	margin: auto;
+	width: 500;
+	box-shadow: 0 0 3px #bbb;
+}
 .copyUrl {
 	-moz-box-shadow:inset 0px 1px 4px -4px #bbdaf7;
 	-webkit-box-shadow:inset 0px 1px 4px -4px #bbdaf7;
