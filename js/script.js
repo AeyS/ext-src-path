@@ -21,7 +21,7 @@ Chromium on Linux - ~/.config/chromium/Default/Extensions
 // Support installation to non-default location
 // Add support to Windows XP
 // Add support to Chromium - problematic since it can run from any folder
-function getChromeExtPath(username) {
+function getChromeExtPath(username,userdir) {
 	var OsName = OSType();
 	var path;
 		
@@ -37,7 +37,7 @@ function getChromeExtPath(username) {
 		break;
 	case "Windows":
 	default: //fallthrough from windows
-		path = "C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data/Default/Extensions/";
+		path = userdir + ":/Users/" + username + "/AppData/Local/Google/Chrome/User Data/Default/Extensions/";
 	}
 	return path;
 }
@@ -45,7 +45,7 @@ function getChromeExtPath(username) {
 var getAllExtFunc = function (listOfExt) {
 //Used http://paul.kinlan.me/creating-a-new-new-tab-page-for-chrome/ as reference
 	var len = listOfExt.length;
-	var path = getChromeExtPath(username);
+	var path = getChromeExtPath(username,userdir);
 	var img ="";
 	var fullPath;
 	$(".chrome-ext-list").append("<table class='extension-info'><tbody>");
@@ -113,15 +113,18 @@ function copyToClipboard( text ){
 //The div to populate with all the information
 var $extTable = $('.chrome-ext-list');
 var username = (typeof Storage.load(null,'path') != "undefined"?Storage.load(null,'path'):"");
+var userdir = (typeof Storage.load(null,'sysdir') != "undefined"?Storage.load(null,'sysdir'):"");
 console.log(" username is " + username);
+console.log(" userdir is " + userdir);
 //Attach the event listener for the click event after document loads
 $(document).ready( function() {
 	//check if we have a username saved
-	var dbdata = Storage.load(null,"path");
+	var dbdataph = Storage.load(null,"path");
+	var dbdatasd = Storage.load(null,"sysdir");
 	var OSName = OSType();
-	console.log("dbdata is " + dbdata);
-	if (dbdata!= null && username != null &&
-		(typeof dbdata != "undefined" || OSName === "Linux"))
+	console.log("dbdataph is " + dbdataph);
+	console.log("dbdatasd is " + dbdatasd);
+	if (dbdatasd!= null && dbdataph!= null && username != null && (typeof dbdataph != "undefined" || OSName === "Linux"))
 	{
 		$(".windows").hide();
 		chrome.management.getAll(getAllExtFunc);
@@ -132,14 +135,15 @@ $(document).ready( function() {
 		return false;
 	});
 	$("#save").click(function() {
-		username = $("input").val();
+		username = $(".username").val();
+		userdir = $(".userdir").val();
 		//Get the list of all chrome extensions with their information
 		chrome.management.getAll(getAllExtFunc);
 		Storage.save(null,'path',username);
+		Storage.save(null,'sysdir',userdir)
 		$(".windows").hide();
 	});
 });
-
 $(".copyUrl").live('click',function() {
 	console.log($(this), $(this).data("href"));
 	copyToClipboard($(this).data("href"));
