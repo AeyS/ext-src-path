@@ -12,3 +12,7 @@ Features:
 Replaces the functionality of the New Tab
 Lists all installed extensions with their icons next to it
 Allows to copy to the clipboard the extension path
+
+AeyS Modification:
+1.Get the entered by the user to modify the system root.
+2.Exterior css layout modify.
